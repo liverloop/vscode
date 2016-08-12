@@ -14,6 +14,7 @@ import { KbExpr } from 'vs/platform/keybinding/common/keybinding';
 import { EditorAction } from 'vs/editor/common/editorAction';
 import { ICommonCodeEditor, IEditorActionDescriptorData, IEditorContribution, KEYBINDING_CONTEXT_EDITOR_TEXT_FOCUS } from 'vs/editor/common/editorCommon';
 import { CommonEditorRegistry, ContextKey, EditorActionDescriptor } from 'vs/editor/common/editorCommonExtensions';
+import { IOSupport } from 'vs/platform/keybinding/common/keybindingResolver';
 import { ISuggestSupport, SuggestRegistry } from 'vs/editor/common/modes';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { EditorBrowserRegistry } from 'vs/editor/browser/editorBrowserExtensions';
@@ -217,6 +218,13 @@ KeybindingsRegistry.registerCommandDesc({
 	weight,
 	when: KbExpr.and(KbExpr.has(KEYBINDING_CONTEXT_EDITOR_TEXT_FOCUS), KbExpr.has(SuggestContext.Visible)),
 	primary: KeyCode.Tab
+});
+
+KeybindingsRegistry.registerCommandRule({
+	id: '^acceptSelectedSuggestion',
+	primary: KeyCode.US_DOT,
+	when: IOSupport.readKeybindingWhen('editorTextFocus && suggestWidgetVisible && editorLangId == \'csharp\' && suggestionSupportsAcceptOnKey'),
+	weight: weight
 });
 
 KeybindingsRegistry.registerCommandDesc({
